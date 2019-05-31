@@ -1,0 +1,39 @@
+version: '3'
+services:
+
+  postgres:
+    image: postgres:11-alpine
+    environment:
+    - POSTGRES_PASSWORD=%I*yW1otkyWBDE8XQ6^
+    volumes:
+    - pgdata:/var/lib/postgresql/data
+    ports:
+    - 5432:5432
+
+  pgadmin:
+    image: dpage/pgadmin4:4.6
+    environment:
+    - PGADMIN_DEFAULT_EMAIL=admin@sap.com
+    - PGADMIN_DEFAULT_PASSWORD=Initial0
+    ports:
+    - 8000:80
+    links:
+    - postgres:postgres
+  
+  redis:
+    image: redis:5-alpine
+    command:
+    - --protected-mode
+    - 'no'
+    ports:
+    - 6379:6379
+  
+  rebrow:
+    image: marian/rebrow
+    ports:
+    - 5001:5001
+    links:
+    - redis:redis
+
+volumes:
+  pgdata:
